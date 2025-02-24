@@ -163,7 +163,7 @@ def deconstruct_browser():
 
 
 def filter_recurse_all(
-    doc: T, predicate: Callable[[cdp.dom.Node, Element], bool]
+    doc: T, predicate: Callable[[Union[cdp.dom.Node, Element]], bool]
 ) -> List[T]:
     """
     test each child using predicate(child), and return all children for which predicate(child) == True
@@ -188,7 +188,7 @@ def filter_recurse_all(
     return out
 
 
-def filter_recurse(doc: T, predicate: Callable[[cdp.dom.Node, Element], bool]) -> T:
+def filter_recurse(doc: T, predicate: Callable[[Union[cdp.dom.Node, Element]], bool]) -> T:
     """
     test each child using predicate(child), and return the first child of which predicate(child) == True
 
