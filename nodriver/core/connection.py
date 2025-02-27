@@ -11,7 +11,6 @@ import sys
 import types
 from asyncio import iscoroutine, iscoroutinefunction
 from typing import Any, Awaitable, Callable, Generator, TypeVar, Union
-
 import websockets.asyncio.client
 
 from .. import cdp
@@ -642,11 +641,13 @@ class Listener:
                 # probably an event
                 try:
                     event = cdp.util.parse_json_event(message)
-                    event_tx = EventTransaction(event)
-                    if not self.connection.mapper:
-                        self.connection.__count__ = itertools.count(0)
-                    event_tx.id = next(self.connection.__count__)
-                    self.connection.mapper[event_tx.id] = event_tx
+                    # event is adding to the mapper but is never got cleared
+                    # discussion https://github.com/ultrafunkamsterdam/undetected-chromedriver/discussions/2148
+                    # event_tx = EventTransaction(event)
+                    # if not self.connection.mapper:
+                    #     self.connection.__count__ = itertools.count(0)
+                    # event_tx.id = next(self.connection.__count__)
+                    # self.connection.mapper[event_tx.id] = event_tx
                 except Exception as e:
                     logger.info(
                         "%s: %s  during parsing of json from event : %s"
